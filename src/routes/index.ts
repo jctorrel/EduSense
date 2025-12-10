@@ -1,0 +1,24 @@
+
+import express from "express";
+
+import { logger } from "../utils/logger";
+import createAuthRouter from "./auth";
+import { requireAuth } from "../middleware/authMiddleware";
+import { requireAdmin } from "../middleware/adminMiddleware";
+
+export default function createApiRouter(args: any): express.Router {
+    const router = express.Router();
+
+    // Routes publiques
+    router.use("/auth", createAuthRouter());
+
+    // Routes protégées
+    router.use(requireAuth);
+
+    // Routes admin
+    router.use(requireAdmin);
+
+    logger.info('✅ API routes initialisées.');
+
+    return router;
+}
